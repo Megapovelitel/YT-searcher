@@ -4,7 +4,7 @@ export default React.createContext({
     queryFull:
     {
         key: '', 
-        query: '',
+        queryValue: '',
         queryName: '',
         results: '',
         sortBy: ''

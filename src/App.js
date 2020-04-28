@@ -10,7 +10,7 @@ import ErrorPage from "./components/ErrorPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const App = () => {
 
-  const [fullQuery, setFullQuery] = useState({key: '', query: '', queryName: '', results: '', sortBy: ''})
+  const [fullQuery, setFullQuery] = useState({key: '', queryValue: '', queryName: '', results: '', sortBy: ''})
   function executeQuery(e) {
     console.log(e)
     setFullQuery((JSON.parse(localStorage.getItem('rap-game'))[e-1]));

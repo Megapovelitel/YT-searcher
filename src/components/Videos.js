@@ -27,10 +27,9 @@ const Videos = (props) => {
 
  
 
-  useEffect(() => {
+      useEffect(() =>  {
     if (query !== '' && searchNow !== false) {
-      youtube
-        .get("/search", {
+          youtube.get("/search", {
           params: {
             key: KEY,
             part: "snippet",
@@ -53,13 +52,13 @@ const Videos = (props) => {
 
   useEffect(() => {
     if (context.fullQuery.key !== '')
-     { youtube
+     {  youtube
         .get("/search", {
           params: {
             key: KEY,
             part: "snippet",
             maxResults: context.fullQuery.results,
-            q: context.fullQuery.query,
+            q: context.fullQuery.queryValue,
             videoId: !null,
             order: context.fullQuery.sortBy
           },
@@ -97,6 +96,7 @@ const Videos = (props) => {
   };
   const handleChange = (e) =>{
     setQuery(e);
+    console.log(query)
   }
   function saveQuery(e) {
     e.preventDefault();
@@ -124,7 +124,7 @@ const Videos = (props) => {
         
         <ModalWindow query={query} vis={vis} unsaveQuery={unsaveQuery} />
       
-        {query !== "" || context !== null ? (
+        {query !== null || context !== null ? (
           <div
             style={{
               display: "flex",
@@ -134,7 +134,7 @@ const Videos = (props) => {
               color: "black",
             }}
           >
-            Видео по запросу: {context.fullQuery.query == '' ? query : context.fullQuery.query} , {amount} результатов
+            Видео по запросу: {context.fullQuery.queryValue == '' ? query : context.fullQuery.queryValue} , {amount} результатов
             <Tooltip title="Отсортировать видео в виде списка">
               <Button
                 style={{ marginLeft: "10px" }}
