@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Modal, Button, Input, Select, Slider } from 'antd';
-import VideoContext from '../context/video-context'
+
 const {Option} = Select;
 
 const ModalWindow =({vis, query, unsaveQuery, queryFull}) =>  {
@@ -13,7 +13,7 @@ const ModalWindow =({vis, query, unsaveQuery, queryFull}) =>  {
     const [fullQuery, setFullQuery] = useState({key, queryValue, queryName, results, sortBy});
     const [fullQueries, setFullQueries] = useState([]);
     
-   const context = useContext(VideoContext)
+   
     useEffect(() => {
         setVisible(vis);
        if  (queryFull === undefined)
@@ -33,8 +33,8 @@ const ModalWindow =({vis, query, unsaveQuery, queryFull}) =>  {
             results : queryFull.results})
         }
                                                         
-        localStorage.getItem(`${context.user}.queries`) !== null ? 
-        setFullQueries(JSON.parse(localStorage.getItem(`${context.user}.queries`))) : setFullQueries([]);
+        localStorage.getItem('rap-game') !== null ? 
+        setFullQueries(JSON.parse(localStorage.getItem('rap-game'))) : setFullQueries([]);
         if (queryFull === undefined) {
           setItemKey(fullQueries.length+1); 
         }  
@@ -52,7 +52,7 @@ const ModalWindow =({vis, query, unsaveQuery, queryFull}) =>  {
      const onOk = (e) => {   
         setVisible(false)
         queryFull === undefined ? fullQueries.push(fullQuery) : fullQueries.splice(queryFull.key-1, 1, fullQuery);
-        localStorage.setItem(`${context.user}.queries`, JSON.stringify(fullQueries));
+        localStorage.setItem('rap-game', JSON.stringify(fullQueries));
         window.location='/queries'
     }
     const onCancel = (e) => {

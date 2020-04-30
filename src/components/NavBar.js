@@ -1,10 +1,9 @@
-import React, {useContext} from "react";
+import React from "react";
 import "./Navbar.css";
 import { NavLink, withRouter } from "react-router-dom";
-import VideoContext from '../context/video-context'
+
 
 const  NavBar = ({ location }) => {
-  const context = useContext(VideoContext)
   return (
     <nav className="navbar">
       <ul className="nav-links">
@@ -24,10 +23,8 @@ const  NavBar = ({ location }) => {
           <NavLink to="/queries" exact activeClassName="active">
             <li className={location.pathname === '/queries' ? 'active' : 'default'}>Избранное</li>
           </NavLink>
-  <h2 className='link' style={{marginRight: 'auto', fontSize:'16px', marginTop: '10px'}}>You are logged as: {context.user} </h2>
-          <NavLink to='/' exact><li onClick={context.logOut} className="link3 link">Logout</li></NavLink>
         </div>
-        
+        <li className="link3 link">Logout</li>
       </ul>
     </nav>
   );
