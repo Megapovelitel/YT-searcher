@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import NavBar from './NavBar'
 import { Table, Tag } from 'antd';
 import './Videos.css'
@@ -8,12 +8,14 @@ import EditOutlined from '@ant-design/icons/EditOutlined'
 import {Link} from 'react-router-dom'
 
 export default function Queries() {
+
+  const context = useContext(VideoContext);
 const [queryArr, setQueryArr] = useState([]);
 const [queryFull, setQueryFull] = useState();
 const [vis, setVis] = useState(false);
 var array = [];
 useEffect(() => {
-setQueryArr(JSON.parse(localStorage.getItem('rap-game')));
+setQueryArr(JSON.parse(localStorage.getItem(`${context.user}.queries`)));
 console.log(queryArr);
 }, [])
 const columns = [

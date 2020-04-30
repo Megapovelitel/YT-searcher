@@ -9,5 +9,12 @@ export default React.createContext({
         results: '',
         sortBy: ''
     },
+    isAuth: {
+
+    },
+    user: {
+       
+    },
+    logOut: () => {},
     executeQuery: () => {}
 });
