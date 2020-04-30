@@ -21,11 +21,12 @@ const App = () => {
   }
 
   function logOut() {
-    localStorage.removeItem(user);
+    localStorage.setItem('currentUser', '');
     setIsAuth(false);
+    window.location='/'
   }
   function checkitout() {
-   if (localStorage.getItem('currentUser') !== null) {
+   if (localStorage.getItem('currentUser') !== '') {
      setUser(localStorage.getItem('currentUser'));
      setIsAuth(true);
      return true
