@@ -25,8 +25,10 @@ const Videos = (props) => {
   const [isLoading, setLoaded] = useState(null);
   const [searchNow, setSearch] = useState(false);
 
- 
-
+  useEffect(() => {
+    return localStorage.getItem('currentUser') !== null ? context.setUser(localStorage.getItem('currentUser')) && context.setIsAuth(true) : null
+   }, [])
+     
       useEffect(() =>  {
     if (query !== '' && searchNow !== false) {
           youtube.get("/search", {
