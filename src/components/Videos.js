@@ -13,7 +13,7 @@ import Loader from './Loader/Loader'
 import VideoContext from '../context/video-context'
 import VideoComponent from './VideoComponent'
 
-const KEY = process.env.REACT_APP_API_KEY;
+const KEY = 'AIzaSyBybOnVEiObpB1QF_R-nY-6gM9J_KiU-9Q';
 
 const Videos = (props) => {
   const context = useContext(VideoContext);
