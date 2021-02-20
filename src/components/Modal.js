@@ -1,105 +1,123 @@
-import React, {useState, useEffect, useContext} from 'react'
-import { Modal, Button, Input, Select, Slider } from 'antd';
-import VideoContext from '../context/video-context'
-const {Option} = Select;
+import React, { useState, useEffect, useContext } from "react";
+import { Modal, Input, Select, Slider, Form } from "antd";
+import VideoContext from "../context/video-context";
 
-const ModalWindow =({vis, query, unsaveQuery, queryFull}) =>  {
-    const [visible, setVisible] = useState(false);
-    const [queryName, setQueryName] = useState('');
-    const [results, setResults] = useState(12);
-    const [sortBy, setSortBy] = useState('relevance'); 
-    const [key, setItemKey] = useState(0);
-    const [queryValue, setQueryValue] = useState('');
-    const [fullQuery, setFullQuery] = useState({key, queryValue, queryName, results, sortBy});
-    const [fullQueries, setFullQueries] = useState([]);
-    
-   const context = useContext(VideoContext)
-    useEffect(() => {
-        setVisible(vis);
-       if  (queryFull === undefined)
-       {  
-         setQueryValue(query);
+const ModalWindow = ({ vis, query, unsaveQuery, queryFull }) => {
+  
+  
+  const [visible, setVisible] = useState(false);
+  const [key, setItemKey] = useState(0);
+  const [form] = Form.useForm();
+  const orderVariants = ["relevance", "date", "rating", "title"];
+  const [fullQuery, setFullQuery] = useState({
+    key: "",
+    q: "",
+    queryName: "",
+    order: "",
+    maxResults: "",
+  });
+  
 
-        } else {
-          
-          setQueryValue(queryFull.queryValue);
-          setQueryName(queryFull.queryName);
-          setSortBy(queryFull.sortBy);
-          setResults(queryFull.results);
-          setFullQuery({key: queryFull.key, 
-            queryValue: queryFull.queryValue, 
-            queryName: queryFull.queryName, 
-            sortBy: queryFull.sortBy, 
-            results : queryFull.results})
-        }
-                                                        
-        localStorage.getItem(`${context.user}.queries`) !== null ? 
-        setFullQueries(JSON.parse(localStorage.getItem(`${context.user}.queries`))) : setFullQueries([]);
-        if (queryFull === undefined) {
-          setItemKey(fullQueries.length+1); 
-        }  
-    }, [vis]);
-
-    useEffect(() => {
-      setFullQuery({key, queryValue, queryName, results, sortBy}) 
-      
-
-      console.log(fullQuery)
-      console.log(queryName)
-
-    }, [key, queryValue, queryName, results, sortBy])
-    
-     const onOk = (e) => {   
-        setVisible(false)
-        queryFull === undefined ? fullQueries.push(fullQuery) : fullQueries.splice(queryFull.key-1, 1, fullQuery);
-        localStorage.setItem(`${context.user}.queries`, JSON.stringify(fullQueries));
-        window.location='/queries'
-    }
-    const onCancel = (e) => {
-      unsaveQuery(e);
-    }
-
-    function handleChange(value) {
-      setSortBy(value);
-    }
-
-    const onChange = (e) => {
-      setQueryName(e);
-    }
-
-    const onChangeResults =(e) => {
-      setResults(e);
-      
-    }
-
-    const onChangeQuery = (e) => {
-     setQueryValue(e)
-    }
+  const context = useContext(VideoContext);
  
-    return (
-      <div>
-        <Modal
-          title="Сохранить запрос"
-          visible={visible}
-          onOk={onOk}
-          onCancel={onCancel}
-        > 
-          <Input style={{marginBottom: '10px'}} onChange={(e) => onChangeQuery(e.target.value)} value={queryValue} 
-          disabled={queryFull === undefined ? true : false}  required/>
-          <Input onChange={(e) => onChange(e.target.value)} value={queryName}
-            defaultValue={queryName} placeholder="имя запроса" />
-          <h1 style={{fontSize: '16px'}}>Сортировать по:</h1>
-          <Select defaultValue={"relevance"} value={sortBy} style={{ width: '200px' }} onChange={handleChange}>
-      <Option value="date">Дате</Option>
-      <Option value="relevance">Релевантности</Option>
-      <Option value="rating">Рейтингу</Option>
-      <Option value="title">Названию</Option>
-    </Select>
-    <h1 style={{fontSize: '16px'}}>Количество результатов запроса (1 - 50)</h1>
-    <Slider onChange={(e) => onChangeResults(e)} value={results} min={1} max={50} tooltipVisible={visible ? true : false} tooltipPlacement='bottom' />
-        </Modal>
-      </div>
-    );
-  }
+  const [fullQueries, setFullQueries] = useState([]);
 
-export default ModalWindow
+  useEffect(() => {
+    setVisible(vis);
+    if (queryFull === undefined) {
+      //opened from Videos component
+      setFullQuery({ ...fullQuery, q: query });
+      form.setFieldsValue({ ...fullQuery, q: query });
+    } else {
+      //opened from Queries component
+      setFullQuery({ ...queryFull });
+      form.setFieldsValue({ ...queryFull });
+    }
+
+    localStorage.getItem(`${context.user.username}.queries`) !== null
+      ? setFullQueries(JSON.parse(localStorage.getItem(`${context.user.username}.queries`)))
+      : setFullQueries([]);
+
+    if (queryFull === undefined && fullQueries.length === 0) {
+      setItemKey(0);
+    } else if (queryFull === undefined) {
+      setItemKey(fullQueries.length);
+    }
+  }, [vis]);
+
+
+  const handleSubmit = () => {
+    setVisible(false);
+    if (queryFull === undefined) {
+      fullQueries.push({...fullQuery, key: key})
+    }
+    else {
+      fullQueries.splice(queryFull.key, 1, fullQuery);
+    }
+    localStorage.setItem(
+      `${context.user.username}.queries`,
+      JSON.stringify(fullQueries)
+    );
+
+    
+    window.location = "/queries";
+  };
+
+  const onCancel = (e) => {
+    unsaveQuery(e);
+  };
+
+  const handleDataChange = (currentField) => {
+    setFullQuery({ ...fullQuery, ...currentField });
+  };
+
+  const capitalize = (s) => {
+    return s[0].toUpperCase() + s.slice(1);
+  };
+
+  return (
+    <div>
+      <Modal
+        title="Сохранить запрос"
+        visible={visible}
+        onOk={form.submit}
+        onCancel={onCancel}
+        getContainer={false}
+      >
+        <Form
+          name="query-form"
+          form={form}
+          onValuesChange={(currentField) => handleDataChange(currentField)}
+          onFinish={handleSubmit}
+        >
+          <Form.Item
+            label="Query"
+            name="q"
+            rules={[{ required: true, message: "Please, enter query" }]}
+          >
+            <Input disabled={query ? true : false} />
+          </Form.Item>
+          <Form.Item label="Query name" name="queryName">
+            <Input />
+          </Form.Item>
+          <Form.Item defaultValue="relevance" label="Order by" name="order">
+            <Select>
+              {orderVariants.map((item, idx) => {
+                return (
+                  <Select.Option key={idx} value={item}>
+                    {capitalize(item)}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Results" name="maxResults">
+            <Slider max={50} min={1} />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </div>
+  );
+};
+
+export default ModalWindow;
