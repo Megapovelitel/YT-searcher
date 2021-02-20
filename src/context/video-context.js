@@ -4,17 +4,15 @@ export default React.createContext({
     queryFull:
     {
         key: '', 
-        queryValue: '',
+        q: '',
         queryName: '',
-        results: '',
-        sortBy: ''
+        maxResults: '',
+        order: ''
     },
-    isAuth: {
-
-    },
+    
     user: {
-       
+       username: "",
+       token: ""
     },
-    logOut: () => {},
     executeQuery: () => {}
 });

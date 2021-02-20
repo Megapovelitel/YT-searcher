@@ -1,0 +1,16 @@
+.form {
+  align-self: center;
+  margin-top: 250px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.err-message {
+    color: red;
+    height: 35px;
+    font-size: 0.95em;
+}

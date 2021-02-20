@@ -6,13 +6,13 @@ const VideoComponent = ({videos, listed}) => {
             {videos.map((e, i) => (
             <div className="video" key={i}>
               <iframe
-                className="videoFrame"
                 id="ytplayer"
                 width="300px"
                 height="250px"
                 src={`https://www.youtube.com/embed/${e.id.videoId}`}
                 frameBorder={0}
                 allowFullScreen
+                title={e.id}
               ></iframe>
               <div className="text">
                 <h4>{e.snippet.title}</h4>

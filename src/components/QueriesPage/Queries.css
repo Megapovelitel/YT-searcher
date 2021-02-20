@@ -1,0 +1,29 @@
+.table {
+  width: 900px;
+  align-self: center;
+  outline: 2px lightgrey solid;
+  margin-top: 20px;
+}
+
+span {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.bg > div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.light-text {
+    color: rgb(22, 146, 230);
+}
+
+.bg {
+  min-height: 100vh;
+  width: auto;
+  background-color: rgb(235, 232, 238);
+}
